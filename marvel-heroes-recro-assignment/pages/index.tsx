@@ -1,7 +1,7 @@
 import { debounce } from "lodash";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import Head from "next/head";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, use, useCallback, useEffect, useState } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { HeroList } from "../components/HeroList";
 import { NoResults } from "../components/NoResults";
@@ -10,18 +10,26 @@ import { getHeros } from "../data";
 import { clientApi } from "../data/axios";
 import { HeroResponse } from "../data/types/HeroReponse";
 import { createURLWithQueryString } from "../data/utils";
+import { marvelSlice } from "../store/slices/marvelSlice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../store";
 
 const Home: React.FC<{ heroes: HeroResponse }> = (props) => {
   const [input, setInput] = useState("");
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const [heroResponse, setHeroResponse] = useState<HeroResponse>(props.heroes);
+  const heroResponse = useAppSelector((state) => state.marvels);
 
   const heroes = heroResponse?.results || [];
 
   const handleOnChange = ({ target: { value } }) => {
     setInput(value);
   };
+
+  useEffect(() => {
+    dispatch(marvelSlice.actions.storeMarvels(props.heroes));
+  }, [props]);
 
   const getData = useCallback(
     debounce((input) => {
@@ -36,7 +44,7 @@ const Home: React.FC<{ heroes: HeroResponse }> = (props) => {
           )
         )
         .then((response) => {
-          setHeroResponse(response.data?.heroes);
+          dispatch(marvelSlice.actions.storeMarvels(response.data.heroes));
         })
         .finally(() => {
           setLoading(false);
