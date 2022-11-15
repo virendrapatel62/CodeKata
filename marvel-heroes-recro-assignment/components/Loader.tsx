@@ -9,14 +9,7 @@ function Loader() {
         </div>
       </div>
       <div>
-        <p
-          className="fs-1"
-          style={{
-            fontWeight: 200,
-          }}
-        >
-          Loading
-        </p>
+        <p className="fs-1 font-200">Loading</p>
       </div>
     </div>
   );

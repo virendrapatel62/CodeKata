@@ -24,3 +24,7 @@ a {
     background: black;
   }
 }
+
+.font-200 {
+  font-weight: 200;
+}

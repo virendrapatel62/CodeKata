@@ -1,14 +1,15 @@
+import { debounce } from "lodash";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import Head from "next/head";
 import { Fragment, useCallback, useEffect, useState } from "react";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import { HeroList } from "../components/HeroList";
-import { createURLWithQueryString, getHeros } from "../data";
-import { clientApi } from "../data/axios";
-import { HeroResponse } from "../data/types/HeroReponse";
-import { debounce } from "lodash";
-import { Loader } from "../components/Loader";
 import { NoResults } from "../components/NoResults";
 import { DataContainer } from "../containers/DataContainer";
+import { getHeros } from "../data";
+import { clientApi } from "../data/axios";
+import { HeroResponse } from "../data/types/HeroReponse";
+import { createURLWithQueryString } from "../data/utils";
 
 const Home: React.FC<{ heroes: HeroResponse }> = (props) => {
   const [input, setInput] = useState("");
@@ -26,9 +27,13 @@ const Home: React.FC<{ heroes: HeroResponse }> = (props) => {
     debounce((input) => {
       clientApi
         .get(
-          createURLWithQueryString("/api/heroes", {
-            search: input,
-          })
+          createURLWithQueryString(
+            "/api/heroes",
+            {
+              search: input,
+            },
+            true
+          )
         )
         .then((response) => {
           setHeroResponse(response.data?.heroes);
@@ -48,9 +53,9 @@ const Home: React.FC<{ heroes: HeroResponse }> = (props) => {
   }, [input]);
 
   return (
-    <Fragment>
+    <ErrorBoundary>
       <Head>
-        <title>{input ? "Showing Result for " + input : "Hero List"}</title>
+        <title>{input ? `Showing Result for ${input}` : "Hero List"}</title>
       </Head>
       <main className="container">
         <div className="form-group mt-3">
@@ -71,13 +76,13 @@ const Home: React.FC<{ heroes: HeroResponse }> = (props) => {
           {heroes.length ? <HeroList heros={heroes}></HeroList> : <NoResults />}
         </DataContainer>
       </main>
-    </Fragment>
+    </ErrorBoundary>
   );
 };
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async (contecxt) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const heroes = await getHeros();
   const result: GetServerSidePropsResult<any> = {
     props: {

@@ -1,19 +1,10 @@
 import axios from "axios";
+import nextConfig from "../next.config";
 
 const api = axios.create({
-  baseURL: "https://gateway.marvel.com",
-});
-
-api.interceptors.request.use((config) => {
-  console.log(config.url);
-  return config;
+  baseURL: nextConfig.apiBaseURL,
 });
 
 const clientApi = axios.create({});
-
-clientApi.interceptors.request.use((config) => {
-  console.log(config.url);
-  return config;
-});
 
 export { api, clientApi };
