@@ -1,0 +1,23 @@
+body {
+  padding: 0px;
+  margin: 0px;
+}
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: rgb(24, 58, 88);
+  padding: 10px 10px;
+  margin-bottom: 10px;
+}
+
+header a {
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0px 10px;
+  color: rgb(223, 229, 234);
+}
+
+main {
+  margin: 10px;
+}
