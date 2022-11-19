@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="chart.css" />
+  </head>
+  <body>
+    <main class="first"></main>
+    <br />
+    <main class="second"></main>
+  </body>
+</html>
+
+<script>
+  function changeData() {
+    const numbers = new Array(20)
+      .fill(0)
+      .map(() => Math.round(Math.random() * 100));
+
+    console.log(numbers);
+
+    const first = document.querySelector(".first");
+    const second = document.querySelector(".second");
+    numbers.forEach((number, index) => {
+      const div = document.createElement(`div`);
+      div.style.height = number + "%";
+      div.innerHTML = number;
+      first.appendChild(div);
+
+      const div2 = document.createElement(`div`);
+      div2.style.width = number + "%";
+      div2.innerHTML = number;
+      second.appendChild(div2);
+    });
+  }
+
+  changeData();
+</script>
