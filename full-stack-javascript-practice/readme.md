@@ -2,6 +2,7 @@
 
 - Installing VS Code
 - [HTML Basics](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics)
+- Comments
 - [Headings]()
 - [Paragraphs]()
 - [Div]()
@@ -30,3 +31,19 @@
 <br>
 
 # CSS
+
+###  CSS is the language we use to style an HTML document.
+
+- Basics
+- Comments
+- External CSS
+- Internal CSS
+- Inline CSS
+- CSS Selectors
+    - Simple selectors (select elements based on name, id, class)
+    - Combinator selectors (select elements based on a specific relationship between them)
+    - Pseudo-class selectors (select elements based on a certain state)
+    - Pseudo-elements selectors (select and style a part of an element)
+    - Attribute selectors (select elements based on an attribute or attribute value)
+- [Colors](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color)
+
