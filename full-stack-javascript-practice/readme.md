@@ -46,4 +46,63 @@
     - Pseudo-elements selectors (select and style a part of an element)
     - Attribute selectors (select elements based on an attribute or attribute value)
 - [Colors](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color)
+- Background Color
+- Background Image
+- Font Styling
+- Color
+- Margin
+- Padding
+- Border
+- Flex
 
+
+# Javascript
+
+- Basics
+- Comments
+- External Javscript Script
+- Internal Javascript
+- Variable
+- Numbers
+- Arrays
+- Functions
+- Objects
+- Arrow Function
+- Arrow Function vs Normal Function
+- Callback
+- Closure
+- Promise
+- Math
+- Number
+- String
+- Date
+
+
+# DOM Manipulation
+
+- Basics
+- DOM
+- Selectors
+- Inner HTML
+- Style Update
+- Append Element
+- Remove Element
+- Event Handling
+
+# JQuery
+
+- Basics
+- Selectors
+- Inner HTML
+- Style Update
+- Append Element
+- Remove Element
+- Event Handling
+
+# React 
+
+- Basics
+- JSX
+- Data Binding
+- Style Update
+- Event Handling
