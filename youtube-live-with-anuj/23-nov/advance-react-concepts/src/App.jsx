@@ -1,34 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  let [count, setCount] = useState(0); // [value , setValue]
+  let [doubleClickCount, setDoubleClickCount] = useState(0); // [value , setValue]
 
+  useEffect(() => {
+    console.log("This Will Invoke First Time");
+    // changin value
+  }, []); // ek bar chalega
+
+  useEffect(() => {
+    console.log("This Will Invoke Whenever count changes");
+    // changin value
+  }, [count]); // jab jab count change hoga tab tab chalega
+
+  useEffect(() => {
+    console.log("This Will Invoke Whenever Double Click Count changes");
+    // changin value
+  }, [doubleClickCount]); // jab jab dblclick value change hoga tab tab chalega
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  useEffect(() => {
+    console.log("In Every Render");
+  }); // bina [] vala , hamesa chalge ajb jb re rendring hogi
+
+  const handleDoubleClick = () => {
+    setDoubleClickCount(doubleClickCount + 1);
+  };
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1 onClick={handleClick}>Hooks</h1>
+
+      <h2>{count}</h2>
+      <h2 onDoubleClick={handleDoubleClick}>
+        Double Click Here {doubleClickCount}
+      </h2>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
