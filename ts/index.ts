@@ -20,11 +20,8 @@ class Student {
 }
 const students = new Student("virendra", "Patel");
 
-const string = JSON.stringify(students); // locals Storage
-const parsed = Student.parse<Student>(string); // read LocalStoage // parsed.__proto__ == Object.prototype
-
-// console.log(Object.getPrototypeOf(parsed) === Object.prototype); // true
-// console.log(Object.getPrototypeOf(parsed) === Student.prototype); // false
+const string = JSON.stringify(students);
+const parsed = Student.parse<Student>(string);
 
 console.log(students.getFullName());
 console.log(parsed.getFullName && parsed.getFullName());
