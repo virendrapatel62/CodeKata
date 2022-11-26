@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      * {
+        border-radius: 4px;
+        margin: 2px;
+      }
+      .main {
+        display: flex;
+        height: 90vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      .users {
+        width: 20%;
+        padding: 10px;
+        background-color: rgba(118, 185, 157, 0.38);
+      }
+
+      .window {
+        flex-grow: 1;
+        padding: 10px;
+        background-color: rgba(208, 218, 227, 0.451);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .window .messages {
+        overflow-y: scroll;
+        border-radius: 5px;
+      }
+      .window .messages li {
+        list-style: none;
+        padding: 5px;
+        margin-top: 4px;
+        border-radius: 5px;
+        border: 1px solid rgba(45, 117, 130, 0.569);
+      }
+
+      ol,
+      ul {
+        padding-left: 0;
+        margin: 5px;
+      }
+
+      .input-box {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        border-radius: 5px;
+        border: 1px solid rgba(189, 178, 178, 0.526);
+      }
+      input {
+        flex-grow: 1;
+        height: 20px;
+        border: none;
+        margin: 4px;
+        border: 0.2px solid rgb(207, 194, 194);
+        border-radius: 5px;
+      }
+      button {
+        border: none;
+        margin: 4px;
+        background-color: rgb(19, 103, 134);
+        border: 0.2px solid rgb(207, 194, 194);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .users .user-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid rgb(135, 137, 29);
+        cursor: pointer;
+        border-radius: 10px;
+      }
+
+      .users .user-item:hover {
+        background-color: rgba(162, 175, 50, 0.285);
+      }
+
+      .login-box {
+        display: flex;
+        justify-content: center;
+        margin: 100px;
+      }
+      .login-form {
+        display: block;
+        padding: 20px;
+        border: 1px solid rgb(201, 198, 198);
+      }
+      .login-form button {
+        width: 200px;
+        height: 25px;
+      }
+
+      .login-form input {
+        width: 200px;
+        height: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        margin: 5px 10px;
+      }
+    </style>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h1 class="name"></h1>
+    <div class="login-box login">
+      <form action="" class="login-form">
+        <div class="form-group">
+          <label for="">Enter User name</label>
+          <input type="text" name="name" id="name" />
+        </div>
+
+        <div>
+          <button type="submit">Login</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="main">
+      <div class="users">
+        <div class="user-item">
+          <span>Virendra</span>
+          <span>🟢</span>
+        </div>
+      </div>
+      <div class="window">
+        <div class="messages">
+          <ul></ul>
+        </div>
+        <form class="input-box">
+          <input type="text" name="" id="" />
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script type="module">
+  import { faker } from "https://cdn.skypack.dev/@faker-js/faker";
+  class User {
+    name;
+    constructor() {
+      this.id = new Date().getTime();
+    }
+  }
+  class Message {
+    constructor(user, message) {
+      this.user = user;
+      this.message = message;
+    }
+  }
+  const socket = new io();
+
+  const loginpage = document.querySelector(".login");
+  const usernameInput = document.querySelector(".login input");
+  const loginForm = document.querySelector(".login form");
+  const mainpage = document.querySelector(".main");
+  const messageForm = mainpage.querySelector("form");
+  const messageInput = messageForm.querySelector("input");
+  const user = new User();
+  let activeUsers = [];
+  let chattingWith = null;
+
+  function showOrHideMainPage(show) {
+    mainpage.style.display = show ? "flex" : "none";
+  }
+
+  function showOrHideLoginPage(show) {
+    loginpage.style.display = show ? "flex" : "none";
+  }
+
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    user.username = usernameInput.value;
+    showOrHideLoginPage(false);
+    showOrHideMainPage(true);
+    document.querySelector(".name").innerHTML = `I am ${user.username}`;
+    socket.emit("login", JSON.stringify(user));
+  });
+
+  window.onload = () => {
+    showOrHideMainPage(false);
+    loginForm.querySelector("input").value = faker.name.firstName();
+    // messageInput.value = faker.lorem.words(4);
+  };
+
+  mainpage.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    sendMessage(messageInput.value, chattingWith);
+    // messageInput.value = faker.lorem.words(4);
+  });
+
+  function sendMessage(message, to) {
+    socket.emit(
+      "message",
+      JSON.stringify({
+        to,
+        message,
+      })
+    );
+  }
+
+  function appendMessage(message) {
+    const messages = document.querySelector(".messages");
+    const ul = document.querySelector(".messages ul");
+    const li = document.createElement("li");
+    li.innerHTML = message;
+    ul.appendChild(li);
+    messages.scrollTo(0, messages.scrollHeight);
+  }
+
+  socket.on("active-users", (users) => {
+    activeUsers = users.filter((u) => u.username !== user.username);
+    renderUserList();
+  });
+
+  socket.on("new-active-user", (newUser) => {
+    activeUsers.push(newUser);
+    console.log({ newUser });
+    renderUserList();
+  });
+
+  socket.on("inactive-user", (offlineUser) => {
+    activeUsers = activeUsers.filter((u) => u.id !== offlineUser.id);
+    renderUserList();
+  });
+
+  socket.on("message-recieve", (message) => {
+    appendMessage(message);
+  });
+
+  function onOpenChat(chatWith) {
+    console.log("Starting chat with ", chatWith);
+    chattingWith = chatWith;
+
+    socket.emit("open-chat", chatWith);
+  }
+
+  function renderUserList() {
+    const usersContainer = document.querySelector(".users");
+    usersContainer.innerHTML = "";
+    activeUsers.forEach((user) => {
+      const div = document.createElement("div");
+      const name = document.createElement("span");
+      name.innerHTML = user.username;
+      const online = document.createElement("span");
+      online.innerHTML = "🟢";
+      div.appendChild(name);
+      div.appendChild(online);
+      div.classList.add("user-item");
+
+      div.onclick = () => onOpenChat(user);
+
+      usersContainer.appendChild(div);
+    });
+  }
+</script>
