@@ -16,15 +16,23 @@ function renderContactList(contacts) {
     tableBody && (tableBody.innerHTML = '');
     contacts.forEach((contact, index) => {
         const row = tableBody === null || tableBody === void 0 ? void 0 : tableBody.insertRow();
-        const [sno, name, phone] = [
+        const [sno, name, phone, deleteCell] = [
+            row === null || row === void 0 ? void 0 : row.insertCell(),
             row === null || row === void 0 ? void 0 : row.insertCell(),
             row === null || row === void 0 ? void 0 : row.insertCell(),
             row === null || row === void 0 ? void 0 : row.insertCell(),
         ];
-        if (name && phone && sno) {
+        if (name && phone && sno && deleteCell) {
             sno.innerText = (index + 1).toString();
             name.innerText = contact.name;
             phone.innerText = contact.phone;
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-button');
+            deleteButton.innerText = '❌';
+            deleteButton.onclick = () => {
+                phoneBook.deleteContact(contact.id);
+            };
+            deleteCell.appendChild(deleteButton);
         }
     });
 }

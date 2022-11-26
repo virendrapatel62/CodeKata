@@ -11,6 +11,10 @@ export class PhoneBook {
             callback(this._contacts);
         });
     }
+    deleteContact(id) {
+        this._contacts = this._contacts.filter(contact => contact.id !== id);
+        this.notify();
+    }
     get contacts() {
         return this._contacts;
     }

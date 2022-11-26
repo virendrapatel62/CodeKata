@@ -6,6 +6,7 @@ export declare class PhoneBook {
     constructor();
     subscribe(callback: SubscribeCallBack): void;
     private notify;
+    deleteContact(id: number): void;
     get contacts(): Contact[];
     add(contact: Contact): void;
     addAll(contacts: Contact[]): void;

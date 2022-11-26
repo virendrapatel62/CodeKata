@@ -19,6 +19,12 @@ export class PhoneBook {
     });
   }
 
+
+  deleteContact(id : number){
+    this._contacts = this._contacts.filter(contact=>contact.id !== id)
+    this.notify()
+  }
+
   get contacts() {
     return this._contacts;
   }
