@@ -1,4 +1,18 @@
-{% with lastname="Patel" %}
+{% extends 'master.html' %}
+<!-- extednitng -->
+
+<!-- title -->
+{%block title%} Template Testing {% endblock %}
+
+<!-- title end -->
+
+{% block mymessage %}
+<p>This page has a master page</p>
+{% endblock %}
+
+<!--  -->
+
+{% block main %} {% with lastname="Patel" %}
 
 <h1>Hello {{ firstname }}, how are you?</h1>
 <h1>Hello {{ lastname }}, how are you?</h1>
@@ -7,7 +21,7 @@
 <h1>Name is Virendra</h1>
 {% else %}
 <h1>Name is not Virendra</h1>
-{% endif %}
+{% endif %} {{'Virendra kumar Patel' | upper}}
 
 <!-- comments -->
 {% comment %}
@@ -25,7 +39,11 @@
   {% endwith %}
 </ul>
 
+{% include 'common.html'%}
+
 <!-- cycle -->
+
+{% filter upper|linenumbers %} {% endfilter %}
 
 <ul>
   {% for x in numbers %}
@@ -36,3 +54,5 @@
   </li>
   {% endfor %}
 </ul>
+
+{% include 'common.html' with from='tesmpate testing page'%} {% endblock %}
