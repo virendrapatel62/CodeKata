@@ -1,0 +1,38 @@
+{% with lastname="Patel" %}
+
+<h1>Hello {{ firstname }}, how are you?</h1>
+<h1>Hello {{ lastname }}, how are you?</h1>
+
+{% endwith %} {% if firstname == 'Virendra'%}
+<h1>Name is Virendra</h1>
+{% else %}
+<h1>Name is not Virendra</h1>
+{% endif %}
+
+<!-- comments -->
+{% comment %}
+<h1>Welcome ladies and gentlemen</h1>
+{% endcomment %}
+
+<!-- loop -->
+<ul>
+  {% with '1 2 3 45 5 6 7' as list %}
+  <!--  -->
+  {% for number in list.split %}
+  <li>{{number}}</li>
+  {% endfor %}
+  <!--  -->
+  {% endwith %}
+</ul>
+
+<!-- cycle -->
+
+<ul>
+  {% for x in numbers %}
+  <li
+    style="background-color:{% cycle 'lightblue' 'pink' 'yellow' 'coral' 'grey' %}"
+  >
+    {{ x }}
+  </li>
+  {% endfor %}
+</ul>

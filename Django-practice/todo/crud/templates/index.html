@@ -1,0 +1,16 @@
+<h1>Members</h1>
+
+<table border="1">
+  {% for x in todos %}
+  <tr>
+    <td>{{ x.id }}</td>
+    <td>{{ x.todo }}</td>
+    <td>{{ x.description }}</td>
+    <td><a href="delete/{{ x.id }}">delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<p>
+  <a href="add/">Add Todos</a>
+</p>
