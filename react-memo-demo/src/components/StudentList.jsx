@@ -15,12 +15,9 @@ export default function StudentList() {
     return ~~(sum / students.length);
   };
 
-  const handleStudentCardClick = useCallback(
-    (student) => {
-      console.log("Clicked on student CArd", student);
-    },
-    [students]
-  );
+  const handleStudentCardClick = useCallback((student) => {
+    console.log("Clicked on student CArd", student);
+  }, []);
 
   //   const [handleStudentCardClick, set] = useState(() => (student) => {
   //     console.log("Clicked on student CArd");
@@ -32,8 +29,6 @@ export default function StudentList() {
   //       };
   //     });
   //   }, [students]);
-
-  console.log(handleStudentCardClick);
 
   // const handleStudentCardClick;
 
@@ -61,7 +56,9 @@ export default function StudentList() {
   };
 
   const onFirstNameChange = ({ target: { value } }, index) => {
-    const newState = [...students];
+    const newState = [...students]; //* right
+    // const newState = Object.assign([], students); //* right
+    // const newState = JSON.parse(JSON.stringify(students)); //! never do this
     const student = { ...newState[index] };
     student.firstName = value;
     newState[index] = student;
