@@ -1,14 +1,10 @@
-import logo from "./logo.svg";
-import "./App.css";
-import { configureStore } from "@reduxjs/toolkit";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRef } from "react";
+import "./App.css";
 import { Students } from "./components/Students";
-import axios from "axios";
-import { useFetchUsers } from "./hooks/useFetchUsers";
 import { useFetchTodos } from "./hooks/useFetchTodos";
-import Todos from "./components/Todos";
+import { useFetchUsers } from "./hooks/useFetchUsers";
+import { userSlice } from "./store/slices/userSlice";
 
 function App() {
   const users = useFetchUsers();
@@ -17,32 +13,21 @@ function App() {
   const appData = useSelector((state) => state);
 
   console.log({ appData });
-  useEffect(() => {
-    dispatch({
-      type: "SAVE_USERS",
-      payload: {
-        users,
-      },
-    });
-  }, [users]);
 
   useEffect(() => {
-    dispatch({
-      type: "SAVE_TODOS",
-      payload: {
-        todos,
-      },
-    });
-  }, [todos]);
+    dispatch(userSlice.actions.saveUsers(users));
+  }, [users]);
+  const onDelete = () => {
+    dispatch(userSlice.actions.deleteUser({ index: 3 }));
+  };
+
   return (
     <div className="App">
-      {/* <Student></Student>
-      <StudentForm></StudentForm> */}
-
+      <button onClick={onDelete}>Delete User</button>
       <div className="row">
-        <div className="col">
+        {/* <div className="col">
           <Todos></Todos>
-        </div>
+        </div> */}
         <div className="col">
           <Students></Students>
         </div>

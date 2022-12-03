@@ -2,19 +2,21 @@ import React from "react";
 import { useRef } from "react";
 import Input from "./Input";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUserAction, newUserAction } from "../store/actions/userActions";
+import { userSlice } from "../store/slices/userSlice";
 
 function Students() {
   const users = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
   const onDelete = (index) => {
-    dispatch(deleteUserAction(index));
+    dispatch(userSlice.actions.deleteUser({ index }));
   };
 
-  const onChange = (value) => {
-    dispatch(newUserAction(value));
+  const onNameChange = (index, value) => {
+    dispatch(userSlice.actions.updateName({ index, name: value }));
   };
+
+  const onChange = (value) => {};
   return (
     <div>
       <h1>Users</h1>
@@ -35,6 +37,10 @@ function Students() {
                 <p>
                   {user.id}. {user.name}
                 </p>
+                <Input
+                  getValueOnEnter
+                  onChange={(value) => onNameChange(index, value)}
+                ></Input>
                 <button
                   onClick={() => onDelete(index)}
                   className="btn btn-danger"
