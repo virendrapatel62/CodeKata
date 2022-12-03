@@ -1,4 +1,10 @@
-<h1>Members</h1>
+{% load static %}
+
+<script src="{% static 'js/index.js'%}"></script>
+<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+<h1 onclick="onClick()">Members</h1>
+
+<img src="{% static 'images/image.jpg'%}" />
 
 <table border="1">
   {% for x in todos %}
