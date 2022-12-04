@@ -1,0 +1,23 @@
+{
+  "name": "codekata",
+  "version": "1.0.0",
+  "description": "![Change branch](https://raw.githubusercontent.com/virendrapatel62/CodeKata/main/branch%20change.jpeg)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virendrapatel62/CodeKata.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/virendrapatel62/CodeKata/issues"
+  },
+  "homepage": "https://github.com/virendrapatel62/CodeKata#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
