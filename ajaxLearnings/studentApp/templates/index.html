@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.js"></script>
+    <style>
+        .close-button-wrapper {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .close-button-wrapper span {
+            cursor: pointer;
+        }
+
+        main {
+            height: 90vh;
+            overflow: scroll;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+
+<body>
+
+
+    {% csrf_token %}
+
+    <main class="container border shadow">
+        <div class="mt-4">
+            <div id="form-container">
+                <form class="border rounded p-2 m-3" id="template">
+                    <div class="close-button-wrapper">
+                        <span>❌</span>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label>Email address</label>
+                            <input name="email" type="email" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col">
+                            <label>First Name</label>
+                            <input name="firstName" type="text" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group col">
+                            <label>Last Name</label>
+                            <input name="lastName" type="text" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <button type="submit" id="submit-button" class="btn btn-info">Save Students</button>
+            <button type="submit" id="add-more-button" class="btn btn-success">Add More Students</button>
+        </div>
+    </main>
+</body>
+
+</html>
+
+
+<script>
+    const addMoreButton = document.querySelector('#add-more-button')
+    const submitButton = document.querySelector('#submit-button')
+    const formTemplate = document.querySelector('#template')
+    const formContainer = document.querySelector('#form-container')
+    const closeButtonSelector = '.close-button-wrapper span'
+
+    submitButton.addEventListener('click', handleSubmitButtonClick)
+    addMoreButton.addEventListener('click', handleAddMoreButtonClick)
+    addCloseButtonHandler(document)
+
+    function getDataFromForm() {
+        const forms = Array.from(document.querySelectorAll('form'))
+        return forms.map(form => {
+            const formData = new FormData(form)
+            const student = Object.fromEntries(formData.entries())
+            return student
+        })
+    }
+
+    function handleSubmitButtonClick() {
+        const students = getDataFromForm()
+        const csrfmiddlewaretoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+        const formData = new FormData()
+        formData.append('students', JSON.stringify(students))
+        formData.append('csrfmiddlewaretoken', csrfmiddlewaretoken)
+        axios.post('/students/create', formData).then(response => {
+            console.log(response.data)
+        })
+    }
+
+    function addCloseButtonHandler(parent) {
+        const closeButton = parent.querySelector(closeButtonSelector)
+        closeButton.addEventListener('click', handleClose)
+    }
+
+    function setInputValue(parent, name, value) {
+        parent.querySelector(`input[name="${name}"]`).value = value
+    }
+
+    function handleAddMoreButtonClick() {
+        const copyOfForm = formTemplate.cloneNode(true)
+        addCloseButtonHandler(copyOfForm)
+        setInputValue(copyOfForm, 'email', faker.internet.email())
+        setInputValue(copyOfForm, 'firstName', faker.name.firstName())
+        setInputValue(copyOfForm, 'lastName', faker.name.lastName())
+        formContainer.appendChild(copyOfForm)
+    }
+    function handleClose(event) {
+        if (formContainer.children.length > 1) {
+            event.target.closest('#template').remove()
+            return
+        }
+        alert('Kya kar rha h bhai tu, ek hi form hai, use bhi delete kar dega kya 😡')
+    }
+
+
+</script>
