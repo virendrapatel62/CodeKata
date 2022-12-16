@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Courses</title>
+    <style>
+      .close-button-wrapper {
+        display: flex;
+        flex-direction: row-reverse;
+      }
+
+      .close-button-wrapper span {
+        cursor: pointer;
+      }
+    </style>
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.js"></script>
+  </head>
+
+  <body>
+    <br />
+    {% csrf_token %}
+    <div id="courseApp" class="container"></div>
+  </body>
+</html>
+
+<script type="text/babel">
+  console.log({ React });
+  console.log({ ReactDOM });
+
+  const csrfmiddlewaretoken = document.querySelector(
+    'input[name="csrfmiddlewaretoken"]'
+  ).value;
+
+  function Counter() {
+    const [count, setCount] = React.useState(0);
+    const handleClick = () => {
+      setCount(count + 1);
+    };
+    return (
+      <div>
+        <button onClick={handleClick}>Inc</button>
+        <h1>{count}</h1>
+      </div>
+    );
+  }
+
+  function CourseFormInputs({
+    onRemove,
+    disableRemove,
+    onInput,
+    course: _course,
+  }) {
+    const [course, setCourse] = React.useState(_course);
+
+    const handleOnChange = ({ target: { name, value } }) => {
+      setCourse({
+        ...course,
+        [name]: value,
+      });
+    };
+
+    return (
+      <tr>
+        <td>
+          <input
+            name="courseName"
+            type="text"
+            value={course.courseName}
+            onChange={handleOnChange}
+            onBlur={() => onInput(course)}
+            placeholder="Course Name"
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>
+          <input
+            name="author"
+            type="text"
+            onChange={handleOnChange}
+            onBlur={() => onInput(course)}
+            placeholder="Author"
+            value={course.author}
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>
+          <input
+            name="price"
+            type="number"
+            onChange={handleOnChange}
+            onBlur={() => onInput(course)}
+            placeholder="Price"
+            value={course.price}
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>{!disableRemove && <span onClick={onRemove}>❌</span>}</td>
+      </tr>
+    );
+  }
+
+  function Actions({ onAddMore, onSave }) {
+    return (
+      <div>
+        <button class="btn btn-info ml-3 mr-4" onClick={onSave}>
+          Save Courses
+        </button>
+        <button class="btn btn-success" onClick={onAddMore}>
+          Add More Courses
+        </button>
+      </div>
+    );
+  }
+
+  function CourseTable({ children }) {
+    return (
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Course Name</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>{children}</tbody>
+      </table>
+    );
+  }
+
+  function App() {
+    const [courses, setCourses] = React.useState([]);
+    const onFormSubmit = (event) => {
+      event.preventDefault();
+    };
+
+    React.useEffect(() => {
+      axios.get("/courses/list").then(({ data: { courses } }) => {
+        setCourses(courses);
+      });
+    }, []);
+
+    const addMoreForms = () => {
+      setCourses([...courses, { id: faker.random.uuid() }]);
+    };
+
+    const deleteCourseForm = (index) => {
+      const _courses = [...courses];
+      _courses.splice(index, 1);
+      setCourses(_courses);
+    };
+
+    const onInput = (index, course) => {
+      const newCourses = [...courses];
+      newCourses[index] = { ...newCourses[index], ...course };
+      setCourses(newCourses);
+    };
+
+    const handleSave = () => {
+      const formData = new FormData();
+      formData.append("courses", JSON.stringify(courses));
+      formData.append("csrfmiddlewaretoken", csrfmiddlewaretoken);
+
+      axios.post("/courses/create", formData).then((response) => {
+        console.log(response);
+      });
+    };
+    return (
+      <React.Fragment>
+        <CourseTable>
+          {courses.map((course, index) => (
+            <CourseFormInputs
+              course={course}
+              disableRemove={courses.length == 1}
+              key={course.id}
+              onInput={(course) => onInput(index, course)}
+              onRemove={() => deleteCourseForm(index)}
+            />
+          ))}
+        </CourseTable>
+
+        <Actions onAddMore={addMoreForms} onSave={handleSave} />
+      </React.Fragment>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.querySelector("#courseApp"));
+  root.render(<App />);
+</script>

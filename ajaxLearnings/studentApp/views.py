@@ -18,3 +18,28 @@ def createStudent(request):
     return JsonResponse({
         "message": "student Saved.."
     })
+
+
+def coursesPage(request):
+    return render(request, 'courses.html')
+
+
+courses = []
+
+
+def createCourses(request):
+    print(request.POST.get('courses'))
+    global courses
+    courses = loads(request.POST.get('courses'))
+    print('-------------------')
+    for course in courses:
+        print(course['author'], course['courseName'], course['price'])
+    print('-------------------')
+
+    return JsonResponse({
+        "message": "Courses Saved.."
+    })
+
+
+def getCourses(request):
+    return JsonResponse({'courses': courses})
