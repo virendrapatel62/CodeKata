@@ -46,7 +46,7 @@ function App() {
   const show = Object.values(showModal).some((v) => v);
   return (
     <div className="container-fluid">
-      <div className="mt-4">
+      <div className="mt-4" aria-hidden={true}>
         <div className="row container mx-auto">
           <div className="col">
             <Users users={userResponse.users} onClick={handleUserClick}></Users>

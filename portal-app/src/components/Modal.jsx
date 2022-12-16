@@ -1,14 +1,43 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Modal from "react-bootstrap/Modal";
 
 function MyAppModal({ show, onHide, children, title }) {
-  return (
-    <Modal show={show} fullscreen onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{children}</Modal.Body>
-    </Modal>
+  return show ? (
+    <div
+      style={{
+        width: "100vw",
+        minHeight: "100vh",
+        top: 0,
+        right: 0,
+        left: 0,
+        zIndex: 100,
+        position: "absolute",
+        backgroundColor: "white",
+      }}
+    >
+      <div className="container mt-4">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            fontSize: 40,
+          }}
+        >
+          <span
+            onClick={onHide}
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            ✖️
+          </span>
+        </div>
+        <h2>{title}</h2>
+        <div>{children}</div>
+      </div>
+    </div>
+  ) : (
+    <Fragment />
   );
 }
 
