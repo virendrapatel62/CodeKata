@@ -19,7 +19,6 @@ code {
 }
 .btn-tomato:hover,
 .btn-tomato:focus,
-.btn-tomato:,
 .btn-tomato:active {
   background-color: rgb(220, 87, 63);
   color: white;
