@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counter App should render with 0 value: Count value 0 1`] = `
+Array [
+  <button
+    class="btn btn-tomato col-6"
+    data-testid="counter-button"
+  >
+    count is 
+    0
+  </button>,
+]
+`;
+
+exports[`Counter App should render with 1 value: count value 1 1`] = `
+<button
+  class="btn btn-tomato col-6"
+  data-testid="counter-button"
+>
+  count is 
+  1
+</button>
+`;

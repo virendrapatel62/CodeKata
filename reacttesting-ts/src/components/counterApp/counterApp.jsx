@@ -8,7 +8,7 @@ export default function Counter() {
       <hr />
       <button
         data-testid="counter-button"
-        className="btn btn-tomato col-4"
+        className="btn btn-tomato col-6"
         onClick={() => setCount((count) => count + 1)}
       >
         count is {count}
